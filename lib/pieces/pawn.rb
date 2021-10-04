@@ -4,11 +4,10 @@ class Pawn < Piece
   def initialize(color, location)
     super(color, location)
     @icon = color == 'white' ? "\u265f" : "\u2659"
-    @moved = false
   end
 
   def find_moves(board)
-    # binding.pry
+    @possible_moves = []
     moves.each do |move|
       x = @location[0] + move[0]
       y = @location[1] + move[1]

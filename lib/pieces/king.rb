@@ -7,6 +7,7 @@ class King < Piece
   end
 
   def find_moves(board)
+    @possible_moves = []
     moves.each do |move|
       x = @location[0] + move[0]
       y = @location[1] + move[1]
