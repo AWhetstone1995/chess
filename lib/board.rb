@@ -26,6 +26,7 @@ class Board
     data[new_square[0]][new_square[1]] = data[from_square[0]][from_square[1]]
     data[from_square[0]][from_square[1]] = nil
     data[new_square[0]][new_square[1]].location = new_square
+    data[new_square[0]][new_square[1]].moved = true
   end
 
   def initial_row(color, row)
@@ -50,29 +51,29 @@ class Board
     display_row_letters
   end
 
-  def legal_moves(piece)
-    legal_moves = []
-    possibilities = piece.possible_moves(data)
-    # valid_moves(possibilities, piece.color)
-    valid_captures(possibilities, piece.color)
-  end
+  # def legal_moves(piece)
+  #   legal_moves = []
+  #   possibilities = piece.possible_moves(data)
+  #   # valid_moves(possibilities, piece.color)
+  #   valid_captures(possibilities, piece.color)
+  # end
 
-  def valid_moves(possible_moves, piece)
-    valid_moves
-    if piece.type_of?(Knight)
-      possible_moves
-    end
-  end
+  # def valid_moves(possible_moves, piece)
+  #   valid_moves
+  #   if piece.type_of?(Knight)
+  #     possible_moves
+  #   end
+  # end
 
-  def valid_captures(possible_moves, color)
-    valid_captures = []
-    possible_moves.each do |move|
-      unless data[move[0]][move[1]].nil?
-        valid_captures << move if data[move[0]][move[1]].color != color
-      end
-    end
-    valid_captures
-  end
+  # def valid_captures(possible_moves, color)
+  #   valid_captures = []
+  #   possible_moves.each do |move|
+  #     unless data[move[0]][move[1]].nil?
+  #       valid_captures << move if data[move[0]][move[1]].color != color
+  #     end
+  #   end
+  #   valid_captures
+  # end
 
   private
 
