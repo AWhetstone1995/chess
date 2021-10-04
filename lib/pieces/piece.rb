@@ -1,17 +1,18 @@
 require_relative '../board'
 
 class Piece
-  attr_accessor :location
-  attr_reader :color, :icon, :board
+  attr_accessor :location, :moved
+  attr_reader :color, :icon
 
   def initialize(color, location)
     # @board = board
     @color = color
     @location = location
     @possible_moves = []
+    @moved = false
   end
-  
-  def possible_moves(board)
+
+  def find_moves(board)
     @possible_moves = []
 
     moves.each do |move|
@@ -28,5 +29,6 @@ class Piece
         y += move[1]
       end
     end
+    @possible_moves
   end
 end

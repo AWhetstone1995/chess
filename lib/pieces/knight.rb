@@ -9,7 +9,7 @@ class Knight < Piece
   end
 
   # Determine the possible moves of the knight object based on it's location on the board
-  def possible_moves(board)
+  def find_moves(board)
     # binding.pry
     moves.each do |move|
       x = @location[0] + move[0]
@@ -18,6 +18,7 @@ class Knight < Piece
         @possible_moves << [x, y] if board[x][y].nil? || board[x][y].color != @color
       end
     end
+    @possible_moves
   end
 
   private
