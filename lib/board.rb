@@ -13,8 +13,11 @@ class Board
   
   def initialize
     @data = Array.new(8) { Array.new(8) }
+    setup_board
     @white_captures = []
     @black_captures = []
+    @white_king = data[7][4]
+    @black_king = data[0][4]
   end
 
   # set up initial board state

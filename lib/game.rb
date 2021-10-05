@@ -8,7 +8,6 @@ class Game
     @board = Board.new
     @current_player = 'white'
     @current_moves = []
-    @board.setup_board
   end
 
   def play
@@ -23,21 +22,7 @@ class Game
   def human_turn
     puts "Please choose a piece you'd like to move. Select the column first and then the row. E.G A1."
     selection = check_legality(player_selection)
-    # moves = board.data[selection[0]][selection[1]].find_moves(board.data)
-    # while moves.empty?
-    #   puts 'That piece does not have a valid move. Please pick another piece'
-    #   selection = translate_input(player_selection)
-    #   moves = board.data[selection[0]][selection[1]].find_moves(board.data)
-    # end
-    # legal_moves = translate_for_player(@current_moves)
-    # puts "These are the legal moves you can make. \n\n"
-    # puts "#{legal_moves} \n\n"
     move = choose_move
-    # until moves.include?(move_to)
-    #   puts "Please choose from these legal moves. \n\n"
-    #   p legal_moves
-    #   move_to = translate_input(player_move)
-    # end
     board.move_piece(selection, move)
     @current_moves = []
     switch_current_player
