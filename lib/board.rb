@@ -10,7 +10,7 @@ require 'pry-byebug'
 
 class Board
   attr_accessor :data
-
+  
   def initialize
     @data = Array.new(8) { Array.new(8) }
     @white_captures = []

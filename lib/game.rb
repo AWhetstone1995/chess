@@ -3,9 +3,11 @@ require_relative 'pieces/piece'
 
 class Game
   attr_reader :board
+
   def initialize
     @board = Board.new
     @current_player = 'white'
+    @current_moves = []
     @board.setup_board
   end
 
@@ -20,24 +22,52 @@ class Game
 
   def human_turn
     puts "Please choose a piece you'd like to move. Select the column first and then the row. E.G A1."
-    selection = translate_input(player_selection)
-    moves = board.data[selection[0]][selection[1]].find_moves(board.data)
-    while moves.empty?
-      puts 'That piece does not have a valid move. Please pick another piece'
-      selection = translate_input(player_selection)
-      moves = moves = board.data[selection[0]][selection[1]].find_moves(board.data)
-    end
-    legal_moves = translate_for_player(moves)
-    puts "These are the legal moves you can make. \n\n"
-    puts "#{legal_moves} \n\n"
-    move_to = translate_input(player_move)
-    until moves.include?(move_to)
-      puts "Please choose from these legal moves. \n\n"
-      p legal_moves
-      move_to = translate_input(player_move)
-    end
-    board.move_piece(selection, move_to)
+    selection = check_legality(player_selection)
+    # moves = board.data[selection[0]][selection[1]].find_moves(board.data)
+    # while moves.empty?
+    #   puts 'That piece does not have a valid move. Please pick another piece'
+    #   selection = translate_input(player_selection)
+    #   moves = board.data[selection[0]][selection[1]].find_moves(board.data)
+    # end
+    # legal_moves = translate_for_player(@current_moves)
+    # puts "These are the legal moves you can make. \n\n"
+    # puts "#{legal_moves} \n\n"
+    move = choose_move
+    # until moves.include?(move_to)
+    #   puts "Please choose from these legal moves. \n\n"
+    #   p legal_moves
+    #   move_to = translate_input(player_move)
+    # end
+    board.move_piece(selection, move)
+    @current_moves = []
     switch_current_player
+  end
+
+  def check_legality(input)
+    input = translate_input(input)
+    build_legal_moves(input)
+    while @current_moves.empty?
+      puts 'That piece does not have a valid move. Please pick another piece'
+      input = translate_input(player_selection)
+      build_legal_moves(input)
+    end
+    input
+  end
+
+  def choose_move
+    puts "These are the legal moves you can make \n\n"
+    print_legal_moves
+    move = translate_input(player_move)
+    until @current_moves.include?(move)
+      puts "Please choose from these legal moves. \n\n"
+      print_legal_moves
+      move = translate_input(player_move)
+    end
+    move
+  end
+
+  def print_legal_moves
+    p translate_for_player(@current_moves)
   end
 
   def translate_input(player_input)
@@ -58,7 +88,7 @@ class Game
 
   def player_selection
     input = gets.chomp
-    until validate_player_input(input) && correct_side_piece?(input)
+    until validate_player_input(input) && correct_color_piece?(input)
       puts 'Please input a valid row and column of your color piece.'
       input = gets.chomp
     end
@@ -80,9 +110,12 @@ class Game
     false
   end
 
-  def correct_side_piece?(input)
+  def correct_color_piece?(input)
     coordinates = translate_input(input)
-    if board.data[coordinates[0]][coordinates[1]].color == @current_player
+    if board.data[coordinates[0]][coordinates[1]].nil?
+      puts 'That tile is empty, choose a piece you own.'
+      false
+    elsif board.data[coordinates[0]][coordinates[1]].color == @current_player
       true
     else
       puts "That piece does not belong to you.\n\n"
@@ -105,5 +138,9 @@ class Game
       return_arr << new_move
     end
     return_arr.flatten
+  end
+
+  def build_legal_moves(coords)
+    @current_moves = board.data[coords[0]][coords[1]].find_moves(board.data)
   end
 end
