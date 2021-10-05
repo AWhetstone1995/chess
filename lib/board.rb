@@ -10,8 +10,11 @@ require 'pry-byebug'
 
 class Board
   attr_accessor :data
+
   def initialize
     @data = Array.new(8) { Array.new(8) }
+    @white_captures = []
+    @black_captures = []
   end
 
   # set up initial board state
@@ -23,6 +26,7 @@ class Board
   end
 
   def move_piece(from_square, new_square)
+    capture?(new_square)
     data[new_square[0]][new_square[1]] = data[from_square[0]][from_square[1]]
     data[from_square[0]][from_square[1]] = nil
     data[new_square[0]][new_square[1]].location = new_square
@@ -49,6 +53,16 @@ class Board
   def display_board
     display_rows
     display_row_letters
+  end
+
+  def capture?(defender)
+    return if data[defender[0]][defender[1]].nil?
+
+    if data[defender[0]][defender[1]].color == 'white'
+      @black_captures << data[defender[0]][defender[1]]
+    else
+      @white_captures << data[defender[0]][defender[1]]
+    end
   end
 
   # def legal_moves(piece)

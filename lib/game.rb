@@ -10,10 +10,12 @@ class Game
   end
 
   def play
-    board.display_board
-    human_turn
-    board.display_board
-    human_turn
+    loop do
+      board.display_board
+      human_turn
+      board.display_board
+      human_turn
+    end
   end
 
   def human_turn
