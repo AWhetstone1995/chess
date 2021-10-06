@@ -59,6 +59,26 @@ class Board
     display_row_letters
   end
 
+  def king_in_check?(color)
+    temp_board = clone_board
+    temp_king = nil
+    color == 'white' ? temp_king = temp_board.white_king : temp_king = temp_board.black_king
+
+    temp_king.attackers
+    temp_king.in_check?
+  end
+
+  def possible_king_check?(current_location, move_to, color)
+    # binding.pry
+    temp_board = clone_board
+    temp_board.move_piece(current_location, move_to)
+    temp_king = nil
+    color == 'white' ? temp_king = temp_board.white_king : temp_king = temp_board.black_king
+
+    temp_king.attackers
+    temp_king.in_check?
+  end
+
   def game_checkmate?(color)
     if color == 'white'
       @white_king.checkmate?
@@ -75,6 +95,10 @@ class Board
     else
       @white_captures << data[defender[0]][defender[1]]
     end
+  end
+
+  def clone_board
+    Marshal.load(Marshal.dump(self))
   end
 
   # def legal_moves(piece)

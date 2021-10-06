@@ -13,22 +13,15 @@ class Piece
   end
 
   def find_moves
+    # binding.pry
     @possible_moves = []
-    king = nil
-    if @color == 'white'
-      king = @board.white_king
-    else
-      king = @board.black_king
-    end
     moves.each do |move|
       x = @location[0] + move[0]
       y = @location[1] + move[1]
-
       loop do
         break unless x.between?(0, 7) && y.between?(0, 7)
 
-        @possible_moves << [x, y] if (@board.data[x][y].nil? || @board.data[x][y].color != @color) &&
-                                     !puts_king_in_check?([x, y], king)
+        @possible_moves << [x, y] if @board.data[x][y].nil? || @board.data[x][y].color != @color
         break unless @board.data[x][y].nil?
 
         x += move[0]
@@ -47,7 +40,16 @@ class Piece
     false
   end
 
-  def puts_king_in_check?(destination, king)
-    king.other_piece_put_me_in_check?(self, destination)
-  end
+  # def puts_king_in_check?(destination)
+  #   # binding.pry
+  #   temp_board = @board
+  #   temp_board.move_piece(@location, destination)
+  #   check = false
+  #   if @color == 'white' 
+  #     check = temp_board.white_king.attackers.in_check?
+  #   else
+  #     check = temp_board.black_king.attackers.in_check?
+  #   end
+  #   check
+  # end
 end

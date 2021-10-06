@@ -11,20 +11,20 @@ class Game
   end
 
   def play
-    loop do
+    until game_over?(@current_player)
       board.display_board
+      print_king_in_check(@current_player)
       human_turn
-      p game_over?(@current_player)
-      board.display_board
-      human_turn
-      p game_over?(@current_player)
     end
   end
 
   def human_turn
-    puts "Please choose a piece you'd like to move. Select the column first and then the row. E.G A1."
+    puts "#{@current_player.capitalize}, please choose a piece you'd like to move. Select the column first and then the row. E.G A1."
     selection = check_legality(player_selection)
     move = choose_move
+    while puts_king_in_check?(selection, move, @current_player)
+      move = choose_move
+    end
     board.move_piece(selection, move)
     @current_moves = []
     switch_current_player
@@ -54,7 +54,11 @@ class Game
   end
 
   def print_legal_moves
-    p translate_for_player(@current_moves)
+    print_arr = translate_for_player(@current_moves)
+    print_arr.each do |index|
+      print "     #{index.upcase} "
+    end
+    puts "\n\n"
   end
 
   def translate_input(player_input)
@@ -74,19 +78,19 @@ class Game
   end
 
   def player_selection
-    input = gets.chomp
+    input = gets.chomp.downcase
     until validate_player_input(input) && correct_color_piece?(input)
       puts 'Please input a valid row and column of your color piece.'
-      input = gets.chomp
+      input = gets.chomp.downcase
     end
     input
   end
 
   def player_move
-    input = gets.chomp
+    input = gets.chomp.downcase
     until validate_player_input(input)
       puts 'Please input a valid row and column of your legal moves.'
-      input = gets.chomp
+      input = gets.chomp.downcase
     end
     input
   end
@@ -131,8 +135,15 @@ class Game
     @current_moves = board.data[coords[0]][coords[1]].find_moves
   end
 
+  def print_king_in_check(color)
+    puts "#{@current_player.capitalize} is in check." if board.king_in_check?(color)
+  end
+
+  def puts_king_in_check?(current_location, move_to, color)
+    board.possible_king_check?(current_location, move_to, color)
+  end
+
   def game_over?(color)
-    # binding.pry
     board.game_checkmate?(color)
   end
 end

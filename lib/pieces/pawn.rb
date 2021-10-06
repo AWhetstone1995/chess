@@ -9,17 +9,11 @@ class Pawn < Piece
   def find_moves
     # binding.pry
     @possible_moves = []
-    king = nil
-    if @color == 'white'
-      king = @board.white_king
-    else
-      king = @board.black_king
-    end
     moves.each do |move|
       x = @location[0] + move[0]
       y = @location[1] + move[1]
       if x.between?(0, 7) && y.between?(0, 7)
-        @possible_moves << [x, y] if @board.data[x][y].nil? && !puts_king_in_check?([x, y], king)
+        @possible_moves << [x, y] if @board.data[x][y].nil?
       end
     end
     legal_attacks

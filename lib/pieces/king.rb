@@ -30,16 +30,16 @@ class King < Piece
     false
   end
 
-  def other_piece_put_me_in_check?(piece, destination)
-    binding.pry
-    test_board = @board
-    test_board.move_piece(piece.location, destination)
-    test_board.data.flatten.each do |attacker|
-      next if attacker.nil? || attacker.color == @color || attacker.is_a?(King)
-      return true if attacker.find_moves.include?(@location)
-    end
-    false
-  end
+  # def other_piece_put_me_in_check?(piece, destination)
+  #   binding.pry
+  #   test_board = @board
+  #   test_board.move_piece(piece.location, destination)
+  #   test_board.data.flatten.each do |attacker|
+  #     next if attacker.nil? || attacker.color == @color || attacker.is_a?(King)
+  #     return true if attacker.find_moves.include?(@location)
+  #   end
+  #   false
+  # end
 
   def attackers
     @attackers = []
@@ -61,7 +61,7 @@ class King < Piece
     if @possible_moves.size.zero?
       attackers
       if @attackers.size.positive?
-        @board..dataflatten.each do |piece|
+        @board.data.flatten.each do |piece|
           next if piece.nil? || piece.color != @color || piece.is_a?(King)
           next if piece.find_moves.include?(attackers_locations)
           return true if no_blocker
@@ -73,7 +73,7 @@ class King < Piece
 
   def no_blocker
     @attackers.each do |attacker|
-      @board.flatten.each do |defender|
+      @board.data.flatten.each do |defender|
         next if defender.nil? || defender.color != @color || defender.is_a?(King)
         return false if defender.can_block?(defender, attacker)
       end
