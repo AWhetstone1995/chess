@@ -1,8 +1,8 @@
 require_relative 'piece'
 
 class Bishop < Piece
-  def initialize(color, location)
-    super(color, location)
+  def initialize(board, color, location)
+    super(board, color, location)
     @icon = color == 'white' ? "\u265d" : "\u2657"
   end
 

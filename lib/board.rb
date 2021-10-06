@@ -10,6 +10,7 @@ require 'pry-byebug'
 
 class Board
   attr_accessor :data
+  attr_reader :white_king, :black_king
 
   def initialize
     @data = Array.new(8) { Array.new(8) }
@@ -37,25 +38,33 @@ class Board
   end
 
   def initial_row(color, row)
-    data[row][0] = Rook.new(color, [row, 0])
-    data[row][1] = Knight.new(color, [row, 1])
-    data[row][2] = Bishop.new(color, [row, 2])
-    data[row][3] = Queen.new(color, [row, 3])
-    data[row][4] = King.new(color, [row, 4])
-    data[row][5] = Bishop.new(color, [row, 5])
-    data[row][6] = Knight.new(color, [row, 6])
-    data[row][7] = Rook.new(color, [row, 7])
+    data[row][0] = Rook.new(self, color, [row, 0])
+    data[row][1] = Knight.new(self, color, [row, 1])
+    data[row][2] = Bishop.new(self, color, [row, 2])
+    data[row][3] = Queen.new(self, color, [row, 3])
+    data[row][4] = King.new(self, color, [row, 4])
+    data[row][5] = Bishop.new(self, color, [row, 5])
+    data[row][6] = Knight.new(self, color, [row, 6])
+    data[row][7] = Rook.new(self, color, [row, 7])
   end
 
   def initial_pawns(color, row)
     0.upto(7) do |i|
-      data[row][i] = Pawn.new(color, [row, i])
+      data[row][i] = Pawn.new(self, color, [row, i])
     end
   end
 
   def display_board
     display_rows
     display_row_letters
+  end
+
+  def game_checkmate?(color)
+    if color == 'white'
+      @white_king.checkmate?
+    else
+      @black_king.checkmate?
+    end
   end
 
   def capture?(defender)

@@ -14,8 +14,10 @@ class Game
     loop do
       board.display_board
       human_turn
+      p game_over?(@current_player)
       board.display_board
       human_turn
+      p game_over?(@current_player)
     end
   end
 
@@ -126,6 +128,11 @@ class Game
   end
 
   def build_legal_moves(coords)
-    @current_moves = board.data[coords[0]][coords[1]].find_moves(board.data)
+    @current_moves = board.data[coords[0]][coords[1]].find_moves
+  end
+
+  def game_over?(color)
+    # binding.pry
+    board.game_checkmate?(color)
   end
 end
