@@ -145,6 +145,6 @@ class Game
   end
 
   def game_over?(color)
-    board.game_checkmate?(color)
+    board.game_over?(color)
   end
 end

@@ -57,6 +57,7 @@ class Board
   end
 
   def display_board(current_player_color)
+    moves_until_draw
     display_captures(current_player_color)
     display_rows
     display_row_letters
@@ -82,12 +83,9 @@ class Board
     temp_king.in_check?
   end
 
-  def game_checkmate?(color)
-    if color == 'white'
-      @white_king.checkmate?
-    else
-      @black_king.checkmate?
-    end
+  def game_over?(color)
+    return true if game_checkmate?(color)
+    return true if move_count_draw
   end
 
   def capture?(defender)
@@ -131,6 +129,22 @@ class Board
 
   private
 
+  def moves_until_draw
+    puts "\n\n   Moves until draw: #{50 - @moves_without_capture}"
+  end
+
+  def game_checkmate?(color)
+    if color == 'white'
+      @white_king.checkmate?
+    else
+      @black_king.checkmate?
+    end
+  end
+
+  def move_count_draw
+    @moves_without_capture == 50
+  end
+
   def display_rows
     (1..7).each do |row|
       display_row(row)
@@ -149,7 +163,7 @@ class Board
         captures_display << piece.class
       end
     end
-    puts "\n\n   Current player captures: #{captures_display} \n\n"
+    puts "   Current player captures: #{captures_display} \n\n"
   end
 
   def display_row(number)
