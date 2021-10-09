@@ -1,5 +1,5 @@
 
-# H3 **Ruby Chess - TOP**
+#H3 **Ruby Chess - TOP**
 
 This is a command line chess game through The Odin Project Curriculum, showcasing a fully functional chess game with captures, legal movement validation, check and mate validation, game draw checking and special move implementation.
 
