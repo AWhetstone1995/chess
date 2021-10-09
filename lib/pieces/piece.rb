@@ -1,7 +1,8 @@
 require_relative '../board'
+require 'pry'
 
 class Piece
-  attr_accessor :location, :moved
+  attr_accessor :location, :moved, :rank
   attr_reader :color, :icon
 
   def initialize(board, color, location)
@@ -10,6 +11,7 @@ class Piece
     @location = location
     @possible_moves = []
     @moved = false
+    @rank = 8 - location[0]
   end
 
   def find_moves

@@ -12,7 +12,7 @@ class Game
 
   def play
     until game_over?(@current_player)
-      board.display_board
+      board.display_board(@current_player)
       print_king_in_check(@current_player)
       human_turn
     end
@@ -42,7 +42,8 @@ class Game
   end
 
   def choose_move
-    puts "These are the legal moves you can make \n\n"
+    board.display_board(@current_player)
+    puts "\n\nChoose from these legal moves you can make \n\n"
     print_legal_moves
     move = translate_input(player_move)
     until @current_moves.include?(move)
@@ -56,7 +57,7 @@ class Game
   def print_legal_moves
     print_arr = translate_for_player(@current_moves)
     print_arr.each do |index|
-      print "     #{index.upcase} "
+      print "    #{index.upcase} "
     end
     puts "\n\n"
   end

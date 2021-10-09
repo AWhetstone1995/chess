@@ -6,7 +6,6 @@ require_relative 'pieces/pawn'
 require_relative 'pieces/knight'
 require_relative 'pieces/bishop'
 require_relative 'display'
-require 'pry-byebug'
 
 class Board
   attr_accessor :data
@@ -19,6 +18,7 @@ class Board
     @black_captures = []
     @white_king = data[7][4]
     @black_king = data[0][4]
+    @moves_without_capture = 0
   end
 
   # set up initial board state
@@ -30,10 +30,12 @@ class Board
   end
 
   def move_piece(from_square, new_square)
+    @moves_without_capture += 1
     capture?(new_square)
     data[new_square[0]][new_square[1]] = data[from_square[0]][from_square[1]]
     data[from_square[0]][from_square[1]] = nil
     data[new_square[0]][new_square[1]].location = new_square
+    data[new_square[0]][new_square[1]].rank = 8 - new_square[0]
     data[new_square[0]][new_square[1]].moved = true
   end
 
@@ -54,7 +56,8 @@ class Board
     end
   end
 
-  def display_board
+  def display_board(current_player_color)
+    display_captures(current_player_color)
     display_rows
     display_row_letters
   end
@@ -90,6 +93,7 @@ class Board
   def capture?(defender)
     return if data[defender[0]][defender[1]].nil?
 
+    @moves_without_capture = 0
     if data[defender[0]][defender[1]].color == 'white'
       @black_captures << data[defender[0]][defender[1]]
     else
@@ -132,6 +136,20 @@ class Board
       display_row(row)
     end
     display_row(8)
+  end
+
+  def display_captures(color)
+    captures_display = []
+    if color == 'white'
+      @white_captures.each do |piece|
+        captures_display << piece.class
+      end
+    else
+      @black_captures.each do |piece|
+        captures_display << piece.class
+      end
+    end
+    puts "\n\n   Current player captures: #{captures_display} \n\n"
   end
 
   def display_row(number)
