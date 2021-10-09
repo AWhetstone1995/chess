@@ -10,5 +10,5 @@ As of 10/09/2021, most core functionalities of chess are implemented, and it is 
 To Do:
 
 > Special Move Implementation (Castling, En Passant, Promotion)  
-> Stalemate and impossible check validation  
+> Stalemate and impossible checkmate validation  
 > Pretty up the board display to display legal moves and captures  
