@@ -1,5 +1,5 @@
 require_relative 'piece'
-require 'pry-byebug'
+require 'pry'
 
 class King < Piece
   def initialize(board, color, location)
