@@ -2,7 +2,7 @@ require_relative 'board'
 require_relative 'pieces/piece'
 
 class Game
-  attr_reader :board
+  attr_reader :board, :current_player
 
   def initialize
     @board = Board.new
@@ -11,11 +11,9 @@ class Game
   end
 
   def play
-    until game_over?(@current_player)
-      board.display_board(@current_player)
-      print_king_in_check(@current_player)
-      human_turn
-    end
+    board.display_board(@current_player)
+    print_king_in_check(@current_player)
+    human_turn
   end
 
   def human_turn
@@ -30,6 +28,7 @@ class Game
     switch_current_player
   end
 
+  # Determines if selected piece has any legal moves
   def check_legality(input)
     input = translate_input(input)
     build_legal_moves(input)
@@ -41,6 +40,7 @@ class Game
     input
   end
 
+  # Method to select destination for a piece based on it's legal moves
   def choose_move
     board.display_board(@current_player)
     puts "\n\nChoose from these legal moves you can make \n\n"
@@ -78,6 +78,16 @@ class Game
     letter.downcase.ord - 97
   end
 
+  def intro
+    puts intro_message
+    i = 0
+    until i == 1
+      gets
+      i += 1
+    end
+  end
+
+  # Method to select a piece to move
   def player_selection
     input = gets.chomp.downcase
     until validate_player_input(input) && correct_color_piece?(input)
@@ -87,6 +97,7 @@ class Game
     input
   end
 
+  # Method to select the destination on the board to move a selected piece
   def player_move
     input = gets.chomp.downcase
     until validate_player_input(input)
@@ -102,6 +113,7 @@ class Game
     false
   end
 
+  # Ensures that a player will pick only colors that belong to the current player
   def correct_color_piece?(input)
     coordinates = translate_input(input)
     if board.data[coordinates[0]][coordinates[1]].nil?
@@ -133,7 +145,11 @@ class Game
   end
 
   def build_legal_moves(coords)
+    # binding.pry
     @current_moves = board.data[coords[0]][coords[1]].find_moves
+    @current_moves.each do |move|
+      @current_moves = [] if puts_king_in_check?(coords, move, @current_player)
+    end
   end
 
   def print_king_in_check(color)
@@ -141,10 +157,17 @@ class Game
   end
 
   def puts_king_in_check?(current_location, move_to, color)
+    # binding.pry
     board.possible_king_check?(current_location, move_to, color)
   end
 
   def game_over?(color)
     board.game_over?(color)
+  end
+
+  def intro_message
+    "Chess is a game played between two players where the objective is to put the opposing player's king in checkmate. \n\n
+In chess, the white color pieces will always move first, followed by black, alternating until a game ending condition is met. \n\n
+Press any key to continue."
   end
 end

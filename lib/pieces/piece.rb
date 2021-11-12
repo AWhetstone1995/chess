@@ -1,5 +1,5 @@
 require_relative '../board'
-require 'pry'
+require 'pry-byebug'
 
 class Piece
   attr_accessor :location, :moved, :rank
@@ -44,13 +44,13 @@ class Piece
 
   # def puts_king_in_check?(destination)
   #   # binding.pry
-  #   temp_board = @board
-  #   temp_board.move_piece(@location, destination)
+  #   temp_board = @board.clone_board
+  #   temp_board.move_piece(location, destination)
   #   check = false
   #   if @color == 'white' 
-  #     check = temp_board.white_king.attackers.in_check?
+  #     check = temp_board.white_king.in_check?
   #   else
-  #     check = temp_board.black_king.attackers.in_check?
+  #     check = temp_board.black_king.in_check?
   #   end
   #   check
   # end

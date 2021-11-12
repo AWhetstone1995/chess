@@ -1,3 +1,7 @@
 require_relative 'game'
 
-Game.new.play
+
+game = Game.new
+
+game.intro
+game.play until game.game_over?(game.current_player)

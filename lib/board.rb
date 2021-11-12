@@ -58,11 +58,13 @@ class Board
 
   def display_board(current_player_color)
     moves_until_draw
+    display_current_player(current_player_color)
     display_captures(current_player_color)
     display_rows
     display_row_letters
   end
 
+  # determines if the current active player has their king in check
   def king_in_check?(color)
     temp_board = clone_board
     temp_king = nil
@@ -72,8 +74,8 @@ class Board
     temp_king.in_check?
   end
 
+  # determines if the movement of any piece will put the same color king in check
   def possible_king_check?(current_location, move_to, color)
-    # binding.pry
     temp_board = clone_board
     temp_board.move_piece(current_location, move_to)
     temp_king = nil
@@ -103,36 +105,18 @@ class Board
     Marshal.load(Marshal.dump(self))
   end
 
-  # def legal_moves(piece)
-  #   legal_moves = []
-  #   possibilities = piece.possible_moves(data)
-  #   # valid_moves(possibilities, piece.color)
-  #   valid_captures(possibilities, piece.color)
-  # end
-
-  # def valid_moves(possible_moves, piece)
-  #   valid_moves
-  #   if piece.type_of?(Knight)
-  #     possible_moves
-  #   end
-  # end
-
-  # def valid_captures(possible_moves, color)
-  #   valid_captures = []
-  #   possible_moves.each do |move|
-  #     unless data[move[0]][move[1]].nil?
-  #       valid_captures << move if data[move[0]][move[1]].color != color
-  #     end
-  #   end
-  #   valid_captures
-  # end
-
   private
 
+  def display_current_player(color)
+    puts "\n\n   Current player: #{color.capitalize}"
+  end
+
+  # Displays how many moves until a draw happens based on no captures
   def moves_until_draw
     puts "\n\n   Moves until draw: #{50 - @moves_without_capture}"
   end
 
+  # Checks if either player is in checkmate, ending the game
   def game_checkmate?(color)
     if color == 'white'
       @white_king.checkmate?
@@ -141,6 +125,7 @@ class Board
     end
   end
 
+  # Returns true if there have been 50 moves where a capture has not been made
   def move_count_draw
     @moves_without_capture == 50
   end
@@ -163,7 +148,7 @@ class Board
         captures_display << piece.class
       end
     end
-    puts "   Current player captures: #{captures_display} \n\n"
+    puts "   #{color.capitalize} captures: #{captures_display} \n\n"
   end
 
   def display_row(number)
@@ -184,13 +169,3 @@ class Board
     puts "    a   b   c   d   e   f   g   h  \n\n"
   end
 end
-
-# test_board = Board.new
-# test_board.setup_board
-# test_board.display_rows
-# # binding.pry
-# test_board.move_piece([7, 1], [5, 2])
-# test_board.display_rows
-# test_board.move_piece([0, 1], [2, 2])
-# test_board.display_rows
-# test_board.each { |cell| p cell }
