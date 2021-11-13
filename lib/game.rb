@@ -145,17 +145,20 @@ class Game
   end
 
   def build_legal_moves(coords)
-    # binding.pry
     @current_moves = board.data[coords[0]][coords[1]].find_moves
-    @current_moves.each do |move|
-      @current_moves = [] if puts_king_in_check?(coords, move, @current_player)
-    end
+    remove_illegal_moves(coords)
   end
 
   def print_king_in_check(color)
     puts "#{@current_player.capitalize} is in check." if board.king_in_check?(color)
   end
 
+  def remove_illegal_moves(coords)
+    @current_moves.reverse_each do |move|
+      @current_moves.delete(move) if puts_king_in_check?(coords, move, @current_player)
+    end
+    @current_moves
+  end
   def puts_king_in_check?(current_location, move_to, color)
     # binding.pry
     board.possible_king_check?(current_location, move_to, color)
